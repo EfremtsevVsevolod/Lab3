@@ -54,15 +54,18 @@ namespace Lab2
 
     abstract class V5Data : IEnumerable<DataItem>, INotifyPropertyChanged
     {
+        private string service_info;
+        private DateTime measurement_time;
+
         public string ServiceInfo
         {
             get
             {
-                return ServiceInfo;
+                return service_info;
             }
             set
             {
-                ServiceInfo = value;
+                service_info = value;
                 OnPropertyChanged("ServiceInfo");
             }
         }
@@ -70,11 +73,11 @@ namespace Lab2
         {
             get
             {
-                return MeasurementTime;
+                return measurement_time;
             }
             set
             {
-                MeasurementTime = value;
+                measurement_time = value;
                 OnPropertyChanged("MeasurementTime");
             }
         }
@@ -91,7 +94,6 @@ namespace Lab2
         {
             ServiceInfo = serviceInfo;
             MeasurementTime = measurementTime;
-
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -125,10 +127,16 @@ namespace Lab2
     {
         public ChangeInfo ChangeInfoInstance { get; set; }
         public string InfoStr { get; set; }
+
         public DataChangedEventArgs(ChangeInfo changeInfoInstance, string infoSrt)
         {
             ChangeInfoInstance = changeInfoInstance;
             InfoStr = infoSrt;
+        }
+
+        public override string ToString()
+        {
+            return ChangeInfoInstance.ToString() + " " + InfoStr;
         }
     }
 }

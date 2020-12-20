@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -21,17 +22,32 @@ namespace Lab2
             set
             {
                 LstData[index] = value;
+                DataChanged(this,
+                    new DataChangedEventArgs(ChangeInfo.Replace,
+                    LstData[index].GetType().ToString() + " with " + 
+                    value.GetType().ToString()));
             }
         }
 
         public void Add(V5Data item)
         {
             LstData.Add(item);
+            LstData[Count].PropertyChanged += PropertyChangedEventHandler;
             Count++;
+            DataChanged(item,
+                new DataChangedEventArgs(ChangeInfo.Add, item.GetType().ToString()));
         }
 
         public bool Remove(string id, DateTime date)
         {
+            foreach (var lstItem in LstData.FindAll(elem => elem.ServiceInfo == id &&
+                                                    elem.MeasurementTime == date))
+            {
+                lstItem.PropertyChanged -= PropertyChangedEventHandler;
+                DataChanged(lstItem,
+                    new DataChangedEventArgs(ChangeInfo.Remove, lstItem.GetType().ToString()));
+            }
+
             int removedCount = LstData.RemoveAll(elem => elem.ServiceInfo == id &&
                                               elem.MeasurementTime == date);
             Count -= removedCount;
@@ -157,5 +173,13 @@ namespace Lab2
         }
 
         public delegate void DataChangedEventHandler(object source, DataChangedEventArgs args);
+
+        public event DataChangedEventHandler DataChanged;
+
+        void PropertyChangedEventHandler(object sender, PropertyChangedEventArgs args)
+        {
+            DataChanged(sender,new DataChangedEventArgs(ChangeInfo.ItemChanged,
+                    sender.GetType().ToString()));
+        }
     }
 }
