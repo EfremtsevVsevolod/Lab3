@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
+using System.ComponentModel;
 
 namespace Lab2
 {
@@ -51,10 +52,40 @@ namespace Lab2
         }
     }
 
-    abstract class V5Data : IEnumerable<DataItem>
+    abstract class V5Data : IEnumerable<DataItem>, INotifyPropertyChanged
     {
-        public string ServiceInfo { get; set; }
-        public DateTime MeasurementTime { get; set; }
+        public string ServiceInfo
+        {
+            get
+            {
+                return ServiceInfo;
+            }
+            set
+            {
+                ServiceInfo = value;
+                OnPropertyChanged("ServiceInfo");
+            }
+        }
+        public DateTime MeasurementTime
+        {
+            get
+            {
+                return MeasurementTime;
+            }
+            set
+            {
+                MeasurementTime = value;
+                OnPropertyChanged("MeasurementTime");
+            }
+        }
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
 
         public V5Data(string serviceInfo, DateTime measurementTime)
         {
@@ -62,6 +93,9 @@ namespace Lab2
             MeasurementTime = measurementTime;
 
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public abstract Vector2[] NearEqual(float eps);
 
         public abstract string ToLongString();
@@ -77,5 +111,24 @@ namespace Lab2
             return GetEnumerator();
         }
         public abstract IEnumerator<DataItem> GetEnumerator();
+    }
+
+    public enum ChangeInfo
+    {
+        ItemChanged,
+        Add,
+        Remove,
+        Replace
+    }
+
+    public class DataChangedEventArgs
+    {
+        public ChangeInfo ChangeInfoInstance { get; set; }
+        public string InfoStr { get; set; }
+        public DataChangedEventArgs(ChangeInfo changeInfoInstance, string infoSrt)
+        {
+            ChangeInfoInstance = changeInfoInstance;
+            InfoStr = infoSrt;
+        }
     }
 }

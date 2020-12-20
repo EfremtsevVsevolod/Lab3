@@ -12,6 +12,18 @@ namespace Lab2
         List<V5Data> LstData = new List<V5Data>();
         public int Count { get; set; } = 0;
 
+        public V5Data this[int index]
+        {
+            get
+            {
+                return LstData[index];
+            }
+            set
+            {
+                LstData[index] = value;
+            }
+        }
+
         public void Add(V5Data item)
         {
             LstData.Add(item);
@@ -143,5 +155,7 @@ namespace Lab2
                 return iterV5DataOnGrid.Except(iterV5DataCollection).Distinct();
             }
         }
+
+        public delegate void DataChangedEventHandler(object source, DataChangedEventArgs args);
     }
 }
