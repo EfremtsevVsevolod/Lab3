@@ -19,9 +19,14 @@ namespace Lab2
                 new V5DataOnGrid("Service info", new DateTime(2020, 12, 20), grid);
 
             v5MainCollectionInstance.Add(v5DataOnGridInstance);
-            v5MainCollectionInstance[3] = v5MainCollectionInstance[6];
+            v5MainCollectionInstance[3] = new V5DataCollection("ababa", DateTime.Now);
             v5MainCollectionInstance[0].ServiceInfo = "Service info";
             v5MainCollectionInstance[0].MeasurementTime = new DateTime(2020, 12, 20);
+
+            Console.WriteLine("======");
+            v5MainCollectionInstance[3].ServiceInfo = "Service info";
+            v5MainCollectionInstance[3].MeasurementTime = new DateTime(2020, 12, 20);
+
             v5MainCollectionInstance.Remove("Service info", new DateTime(2020, 12, 20));
         }
 

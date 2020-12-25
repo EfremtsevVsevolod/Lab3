@@ -22,9 +22,10 @@ namespace Lab2
             set
             {
                 LstData[index] = value;
+                LstData[index].PropertyChanged += PropertyChangedEventHandler;
                 DataChanged(this,
                     new DataChangedEventArgs(ChangeInfo.Replace,
-                    LstData[index].GetType().ToString() + " with " + 
+                    LstData[index].GetType().ToString() + " with " +
                     value.GetType().ToString()));
             }
         }
@@ -53,7 +54,7 @@ namespace Lab2
             Count -= removedCount;
             return removedCount > 0;
         }
-        
+
         void AddOneDefaultGrid(Grid2D grid)
         {
             V5DataOnGrid v5DataOnGridDefaultInstance =
@@ -163,7 +164,7 @@ namespace Lab2
                                        from dataItem in lstElem
                                        select dataItem.PointCoord;
 
-                var iterV5DataCollection = from lstElem in LstData 
+                var iterV5DataCollection = from lstElem in LstData
                                            where lstElem.GetType() == typeof(V5DataCollection)
                                            from dataItem in lstElem
                                            select dataItem.PointCoord;
@@ -178,7 +179,7 @@ namespace Lab2
 
         void PropertyChangedEventHandler(object sender, PropertyChangedEventArgs args)
         {
-            DataChanged(sender,new DataChangedEventArgs(ChangeInfo.ItemChanged,
+            DataChanged(sender, new DataChangedEventArgs(ChangeInfo.ItemChanged,
                     sender.GetType().ToString()));
         }
     }
